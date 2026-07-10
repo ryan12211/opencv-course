@@ -1,32 +1,29 @@
 #pylint:disable=no-member
 
 import cv2 as cv
-import matplotlib.pyplot as plt
+import numpy as np
 
-img = cv.imread('../Resources/Photos/park.jpg')
-cv.imshow('Park', img)
+img = cv.imread('../Resources/Photos/miels.jpg')
+cv.imshow('Original', img)
 
-# plt.imshow(img)
-# plt.show()
-
-# BGR to Grayscale
-gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
-cv.imshow('Gray', gray)
-
-# BGR to HSV
+# Convert BGR to HSV
 hsv = cv.cvtColor(img, cv.COLOR_BGR2HSV)
-cv.imshow('HSV', hsv)
 
-# BGR to L*a*b
-lab = cv.cvtColor(img, cv.COLOR_BGR2LAB)
-cv.imshow('LAB', lab)
+# Split HSV channels
+h, s, v = cv.split(hsv)
 
-# BGR to RGB
-rgb = cv.cvtColor(img, cv.COLOR_BGR2RGB)
-cv.imshow('RGB', rgb)
+# Change the Hue (color)
+# Add 50 to the hue (values wrap around at 180)
+h = (h.astype(np.int16) + 50) % 180
+h = h.astype(np.uint8)
 
-# HSV to BGR
-lab_bgr = cv.cvtColor(lab, cv.COLOR_LAB2BGR)
-cv.imshow('LAB --> BGR', lab_bgr)
+# Merge the channels
+new_hsv = cv.merge([h, s, v])
+
+# Convert back to BGR for display
+new_bgr = cv.cvtColor(new_hsv, cv.COLOR_HSV2BGR)
+
+cv.imshow('Changed Color', new_bgr)
 
 cv.waitKey(0)
+cv.destroyAllWindows()

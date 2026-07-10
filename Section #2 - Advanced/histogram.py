@@ -1,8 +1,13 @@
 #pylint:disable=no-member
 
 import cv2 as cv
-import matplotlib.pyplot as plt
+try:
+    import matplotlib.pyplot as plt
+except ImportError:
+    plt = None
+    print('matplotlib.pyplot is not available; histograms will not be shown.')
 import numpy as np
+from pathlib import Path
 
 img = cv.imread('../Resources/Photos/cats.jpg')
 cv.imshow('Cats', img)
